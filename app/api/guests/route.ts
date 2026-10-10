@@ -4,6 +4,7 @@ import { requireAdmin, requireUser } from '@/lib/auth';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { guestSchema } from '@/lib/validation';
 import { verificationUrl } from '@/lib/card';
+import { saveProtectedQrToken } from '@/lib/protected-qr-token';
 
 const hash = (value: string) => createHash('sha256').update(value).digest('hex');
 const newToken = () => randomBytes(32).toString('base64url');
@@ -27,8 +28,15 @@ export async function POST(request: NextRequest) {
     const { data: duplicate } = await admin.from('vip_guests').select('id,full_name').ilike('full_name', body.full_name).is('archived_at', null);
     const { data: guest, error } = await admin.from('vip_guests').insert({ ...body, designation: body.designation || null, email: body.email || null, phone: body.phone || null }).select().single();
     if (error) throw error;
-    const token = newToken();
-    const { error: credentialError } = await admin.from('qr_credentials').insert({ guest_id: guest.id, token, token_hash: hash(token), regenerated_by: user.id });
+    let token = newToken();
+    let { error: credentialError } = await admin.from('qr_credentials').insert({ guest_id: guest.id, token, token_hash: hash(token), regenerated_by: user.id });
+    // Older Supabase projects may not yet have the private token column. In
+    // that case the token is encrypted in protected database audit data and
+    // is restored unchanged on every future re-download.
+    if (credentialError && /token|column/i.test(credentialError.message)) {
+      ({ error: credentialError } = await admin.from('qr_credentials').insert({ guest_id: guest.id, token_hash: hash(token), regenerated_by: user.id }));
+      if (!credentialError) await saveProtectedQrToken(guest.id, user.id, token);
+    }
     if (credentialError) throw credentialError;
     await admin.from('audit_events').insert({ actor_id: user.id, action: 'guest_created', guest_id: guest.id, details: { table: guest.table_number, seat: guest.seat_number } });
     return NextResponse.json({ guest, verification_url: verificationUrl(token), duplicate_warning: duplicate?.length ? 'A guest with this exact name already exists. The new guest was saved as a separate record.' : null }, { status: 201 });
