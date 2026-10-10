@@ -13,7 +13,7 @@ export async function GET() {
     await requireUser();
     const { data, error } = await createAdminClient().from('vip_guests')
       .select('id,vip_id,full_name,designation,photo_path,table_number,seat_number,status,first_checked_in_at,created_at')
-      .is('archived_at', null).order('created_at', { ascending: false });
+      .is('archived_at', null).order('table_number', { ascending: true }).order('seat_number', { ascending: true }).order('full_name', { ascending: true });
     if (error) throw error;
     return NextResponse.json({ guests: data });
   } catch (error) { return respond(error); }

@@ -21,7 +21,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
   if (credential.revoked_at) return NextResponse.json({ error: 'This QR credential has been revoked.' }, { status: 410 });
   const { data: guest } = await admin.from('vip_guests').select('id,vip_id,full_name,designation,photo_path,table_number,seat_number,status,first_checked_in_at,created_at').eq('id', credential.guest_id).is('archived_at', null).maybeSingle();
   if (!guest) return NextResponse.json({ error: 'This VIP record is no longer active.' }, { status: 404 });
-  let photo_url: string | null = null;
-  if (guest.photo_path) { const { data } = await admin.storage.from('guest-photos').createSignedUrl(guest.photo_path, 60 * 10); photo_url = data?.signedUrl || null; }
-  return NextResponse.json({ guest: { ...guest, photo_url } });
+  // A valid card is not permission to view a private guest photo. Signed-in staff
+  // obtain the image through the protected guest-photo route instead.
+  return NextResponse.json({ guest });
 }
