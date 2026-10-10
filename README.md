@@ -28,6 +28,8 @@ This is designed for the current free tiers, not a guarantee of future free use.
    ```
    There are no default passwords. After the first administrator signs in, create every further administrator and protocol-officer account from `/admin/staff`.
 
+If you deployed an earlier version of this project before the VIP card re-download feature was added, also run [`supabase/migrations/20261010_persist_qr_token.sql`](./supabase/migrations/20261010_persist_qr_token.sql) in the Supabase SQL Editor. Existing cards must be reissued once; newly created cards can then be re-downloaded without changing their QR code.
+
 7. In **Supabase Dashboard > Authentication > Providers > Email**, turn off **Allow new users to sign up**. The login page intentionally has no registration option. This is essential: it prevents any person from creating an officer account outside the administrator-controlled staff screen.
 
 ## Deploy to Vercel free Hobby

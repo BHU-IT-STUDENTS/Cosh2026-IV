@@ -10,7 +10,12 @@ export function WorkspaceLinks() {
   const [adminNav, setAdminNav] = useState<HTMLElement | null>(null);
 
   useEffect(() => {
-    setAdminNav(path === '/admin' ? document.querySelector<HTMLElement>('.sidebar nav') : null);
+    if (path !== '/admin') { setAdminNav(null); return; }
+    const findNav = () => setAdminNav(document.querySelector<HTMLElement>('.sidebar nav'));
+    findNav();
+    const observer = new MutationObserver(findNav);
+    observer.observe(document.body, { childList: true, subtree: true });
+    return () => observer.disconnect();
   }, [path]);
 
   if (path === '/admin' && adminNav) return createPortal(<><Link href="/admin/staff">Staff &amp; access</Link><Link href="/account">My profile</Link></>, adminNav);

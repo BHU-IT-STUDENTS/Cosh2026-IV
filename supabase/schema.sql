@@ -35,6 +35,9 @@ create index vip_guests_search_idx on public.vip_guests using gin (to_tsvector('
 create table public.qr_credentials (
   id uuid primary key default gen_random_uuid(),
   guest_id uuid not null unique references public.vip_guests(id) on delete cascade,
+  -- Stored in this private table so an administrator can re-download the same card.
+  -- It is never sent to browsers except as the QR URL of an authorized card action.
+  token text not null unique,
   token_hash text not null unique,
   revoked_at timestamptz,
   created_at timestamptz not null default now(),
