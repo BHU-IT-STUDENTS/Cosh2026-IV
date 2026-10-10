@@ -22,16 +22,12 @@ export function AdminAppNav() {
     window.location.assign('/login');
   }
 
-  return <><button type="button" className="admin-desktop-signout" onClick={signOut}><span aria-hidden="true">⇥</span> Sign out</button><nav className="admin-app-nav" aria-label="Administrator navigation">
+  return <><nav className="admin-app-nav" aria-label="Administrator navigation">
     {items.map(item => <Link key={item.href} href={item.href} className={pathname === item.href ? 'active' : ''}><span aria-hidden="true">{item.icon}</span><small>{item.label}</small></Link>)}
     <button type="button" onClick={signOut}><span aria-hidden="true">⇥</span><small>Sign out</small></button>
     <style jsx global>{`
-      .admin-desktop-signout { position:fixed; z-index:60; top:24px; right:28px; display:inline-flex; align-items:center; gap:7px; padding:10px 15px; border:1px solid #d8c79f; border-radius:999px; background:#fffdf7; color:#173d32; box-shadow:0 5px 16px rgba(26,48,38,.10); cursor:pointer; font:700 13px/1 inherit; }
-      .admin-desktop-signout span { color:#b88d47; font-size:19px; }
-      .admin-desktop-signout:hover { border-color:#b88d47; color:#9f453b; }
       .admin-app-nav { display:none; }
       @media (max-width:760px) {
-        .admin-desktop-signout { display:none; }
         .dashboard { padding-bottom:94px !important; }
         .admin-app-nav { display:flex !important; position:fixed !important; z-index:999 !important; right:0; bottom:0; left:0; height:78px; align-items:stretch; overflow-x:auto; background:#fffdf7; border-top:1px solid #e8decb; box-shadow:0 -10px 28px rgba(18,47,38,.13); }
         .admin-app-nav::-webkit-scrollbar { display:none; }
