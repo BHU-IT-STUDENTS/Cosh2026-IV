@@ -1,0 +1,4 @@
+import Link from 'next/link';
+import { Brand } from '@/components/brand';
+
+export default function Home() { return <main className="landing"><nav><Brand /><div><Link href="/check-in" className="text-link">Protocol check-in</Link><Link href="/login" className="button small">Admin sign in</Link></div></nav><section className="hero"><p className="eyebrow">17 OCTOBER 2026 · VIP RECEPTION</p><h1>Graceful arrivals.<br /><em>Beautifully managed.</em></h1><p className="intro">A private, secure reception experience for the VIP guests of Comfort Weds Shammah.</p><div className="hero-actions"><Link href="/login" className="button">Open administration <span>→</span></Link><Link href="/check-in" className="outline-button">Open check-in</Link></div></section><section className="feature-row"><div><b>01</b><p>Personalized QR ID cards</p></div><div><b>02</b><p>Confident seating guidance</p></div><div><b>03</b><p>Quick, considerate check-in</p></div></section></main>; }

@@ -1,0 +1,32 @@
+{
+  "name": "cosh2026-vip-smart-management",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@supabase/ssr": "^0.5.2",
+    "@supabase/supabase-js": "^2.49.8",
+    "html5-qrcode": "^2.3.8",
+    "html-to-image": "^1.11.11",
+    "jspdf": "^2.5.2",
+    "jszip": "^3.10.1",
+    "next": "^15.3.0",
+    "qrcode": "^1.5.4",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "zod": "^3.24.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.3",
+    "@types/qrcode": "^1.5.5",
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
+    "typescript": "^5.8.3"
+  }
+}

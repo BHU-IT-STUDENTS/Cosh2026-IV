@@ -1,0 +1,18 @@
+node_modules
+.next
+.vercel
+
+# Secrets and machine-specific configuration. Keep the safe template tracked.
+.env
+.env.*
+!.env.example
+!.env.sample
+*.local
+*.pem
+*.key
+*.p12
+*.pfx
+service-account*.json
+supabase/.temp/
+
+*.tsbuildinfo

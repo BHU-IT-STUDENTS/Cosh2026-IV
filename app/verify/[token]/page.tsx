@@ -1,0 +1,9 @@
+'use client';
+import { useEffect, useState } from 'react';
+import { useParams } from 'next/navigation';
+import Link from 'next/link';
+import { Brand } from '@/components/brand';
+import type { Guest } from '@/lib/types';
+
+type Verified = Guest & { photo_url?: string | null };
+export default function VerifyPage() { const { token } = useParams<{ token: string }>(); const [guest, setGuest] = useState<Verified | null>(null); const [error, setError] = useState(''); useEffect(() => { fetch(`/api/verify/${encodeURIComponent(token)}`, { cache: 'no-store' }).then(async r => { const body = await r.json(); if (!r.ok) setError(body.error || 'Could not verify this card.'); else setGuest(body.guest); }).catch(() => setError('Verification needs an internet connection. Please use the guest list backup if you are offline.')); }, [token]); return <main className="verify-page"><Brand /><div className="public-verify">{!guest && !error && <p>Verifying VIP credential…</p>}{error && <><p className="eyebrow">VERIFICATION UNAVAILABLE</p><h1>{error}</h1><p>Do not approve this card automatically. An authorized officer can check the backup list.</p></>}{guest && <><p className="eyebrow">SECURE VIP VERIFICATION</p><p className="valid-pill">● VALID QR CREDENTIAL</p><div className="verified-identity">{guest.photo_url ? <img src={guest.photo_url} alt="" /> : <div className="avatar">{guest.full_name.slice(0, 1)}</div>}<div><h1>{guest.full_name}</h1><p>{guest.designation}</p><code>{guest.vip_id}</code></div></div><div className="seat-banner"><span>TABLE <b>{guest.table_number.padStart(2, '0')}</b></span><i /><span>SEAT <b>{guest.seat_number.padStart(2, '0')}</b></span></div><p>{guest.status === 'checked_in' ? 'This guest has already checked in. Verify identity and allow re-entry.' : 'An authorized protocol officer must confirm identity and record first check-in.'}</p><Link href="/check-in" className="button full">Continue to authorized check-in</Link></>}</div></main>; }

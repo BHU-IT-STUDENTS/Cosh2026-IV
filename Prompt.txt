@@ -1,0 +1,455 @@
+ROLE
+Act as a senior full-stack developer, UI/UX designer, database architect, security engineer, and deployment specialist. Build a complete, functional, secure, elegant, and mobile-friendly VIP Guest Management, Seating Assignment, QR ID Card, and Smart Check-in System for my wedding.
+
+PROJECT NAME
+CoSh2026 VIP Smart Seating & Check-in System
+
+WEDDING
+Couple: Comfort Weds Shammah
+Wedding date: 17 October 2026
+Brand: CoSh2026
+Primary objective: Make VIP reception, verification, check-in, seating, and re-entry fast, simple, secure, and professional.
+
+IMPORTANT HOSTING REQUIREMENT — FREE ONLY
+
+I want the application hosted at a Vercel URL ending in .vercel.app, using Vercel's free Hobby plan where eligible.
+
+I do not want to pay for hosting, a subscription, a custom domain, a paid database, premium APIs, or paid messaging services for this project.
+
+Use only services that have a genuinely free tier sufficient for this wedding application. Before selecting any provider, verify its current free-tier conditions, storage limits, usage limits, account requirements, and restrictions.
+
+Preferred architecture:
+- Next.js with TypeScript for the website and server-side API functionality.
+- Vercel Hobby for deployment, hosting, and the free .vercel.app URL.
+- Supabase Free for PostgreSQL database, authentication support where appropriate, and guest-photo storage, if its current limits and terms meet the project's requirements.
+
+You may use another genuinely free database or storage provider if it makes deployment simpler and remains suitable for this project. Explain the reason for any substitution.
+
+Use Vercel-compatible server-side functions rather than requiring a separate paid or always-running server.
+
+Do not use localStorage as the main database. Do not store uploaded files on a temporary serverless filesystem. Do not use mock data in place of real database operations.
+
+Do not subscribe me to a service, start a paid trial, activate paid resources, add a credit card, or upgrade any account. If a required free service cannot be configured without payment, stop and explain the alternative.
+
+The .vercel.app address must be sufficient. Do not require me to buy a domain or configure custom DNS.
+
+If you cannot directly access my Vercel or database accounts, give me the exact steps to connect them. Never claim deployment is complete until it has actually succeeded. Deploy through the account I authorize and verify the production URL.
+
+1. INSPECT THE EXISTING PROJECT
+
+If I provide an existing CoSh2026 wedding website or GitHub repository:
+- Inspect its framework, structure, current features, and deployment configuration.
+- Integrate this system into the existing project if practical.
+- Preserve all working wedding website features.
+- Reuse the existing logo, branding, and design assets.
+- Avoid creating a duplicate application unnecessarily.
+
+If no existing project is provided, create a clean standalone application.
+
+Before implementation, provide a concise plan and identify any account setup or credentials I must supply.
+
+2. ADMIN DASHBOARD
+
+Create a secure, responsive administrator dashboard.
+
+Display:
+- Total registered VIPs.
+- VIPs checked in.
+- VIPs not yet checked in.
+- Quick actions for adding guests, managing seating, generating cards, searching guests, and opening check-in mode.
+
+Include a searchable and filterable guest table with guest name, photo thumbnail, VIP ID, table, seat, and attendance status.
+
+Provide clear loading indicators, success messages, validation errors, and empty states.
+
+3. SECURE ADMIN AND USHER ACCESS
+
+Implement secure authentication and role-based access.
+
+Administrator permissions:
+- Add, edit, and remove guest records.
+- Assign or change tables and seats.
+- Upload or replace guest photographs.
+- Generate, download, revoke, and regenerate QR cards.
+- Manage authorized protocol officers.
+- View attendance reports and export guest lists.
+
+Protocol officer permissions:
+- Scan QR codes.
+- Search for guests.
+- View necessary identity and seating information.
+- Confirm first check-in.
+- Verify returning guests.
+
+Protocol officers must not be able to create guests, change seat assignments, revoke QR codes, or access unnecessary personal information.
+
+Create the first administrator through a secure setup process or documented environment configuration. Do not hardcode default production passwords or expose privileged credentials in the frontend.
+
+4. VIP REGISTRATION
+
+Provide an easy Add VIP form containing:
+- Full name — required.
+- Photograph — optional.
+- Title or designation — optional.
+- Table number — required.
+- Seat number — required.
+- Contact email — optional.
+- Phone number — optional.
+
+Generate automatically:
+- A unique internal guest ID.
+- A cryptographically secure, unpredictable QR token.
+- A personalized VIP ID card.
+- A persistent database record.
+
+Allow administrators to register guests gradually as names become available.
+
+Support editing names, replacing photographs, changing seating assignments, and updating optional contact information.
+
+Warn about potential duplicate names but allow different people to have the same name. Do not identify guests solely by name.
+
+5. TABLE AND SEAT MANAGEMENT
+
+Keep seating management simple.
+
+Allow administrators to:
+- Create or use table numbers.
+- Assign seats to guests.
+- View guests grouped by table.
+- See occupied and available seats.
+- Search for a table, seat, or guest.
+- Reassign a guest when necessary.
+
+Prevent accidental assignment of the same seat to multiple active VIPs. Validate seat availability on the server, not just in the browser.
+
+Show friendly seating labels such as Table 04, Seat 02.
+
+No complex visual floor-plan editor is required.
+
+6. PERSONALIZED VIP QR ID CARDS
+
+Automatically generate a polished digital VIP ID card after a guest is registered.
+
+Every card must contain:
+- The official CoSh2026 wedding logo.
+- Comfort Weds Shammah branding.
+- The guest's full name prominently displayed ABOVE the QR code.
+- Guest photograph, when provided.
+- Unique VIP ID.
+- Assigned table number.
+- Assigned seat number.
+- Wedding date: 17 October 2026.
+- A real QR code linked to the guest's secure verification token.
+
+Design:
+- Premium ivory or off-white background.
+- Tasteful olive-green or sage-green accents.
+- Subtle gold detailing.
+- Elegant typography and balanced spacing.
+- High-contrast QR code with sufficient quiet space around it.
+- Readable on a phone screen and in print.
+
+Do not stretch the QR code or make it too small to scan.
+
+Allow the administrator to:
+- Preview an individual card.
+- Download an individual PNG or JPG.
+- Generate a print-ready PDF.
+- Print an individual card.
+- Select several guests and download their cards together.
+- Download all generated cards in a ZIP file.
+
+Generate real QR codes, not decorative placeholders.
+
+Use the actual wedding logo if it exists in the project. If no logo exists, create a clean text-based CoSh2026 monogram as a temporary brand element that can be replaced later.
+
+7. QR SECURITY
+
+Every guest must have a different QR token, even if two guests have the same name.
+
+Use a cryptographically secure random token or a signed, opaque verification URL. Never use the guest's name, phone number, sequential database ID, or another predictable value as the security credential.
+
+Example of the URL structure:
+
+https://your-project.vercel.app/verify/UNPREDICTABLE_TOKEN
+
+This is an example only. Use the actual deployed Vercel URL in production.
+
+The QR code must resolve to the correct database record through secure server-side verification.
+
+Do not encode private guest information directly in the QR code.
+
+A person must not be able to create a valid QR credential merely by entering a VIP's name or guessing an ID.
+
+Implement:
+- Secure token generation.
+- Server-side token verification.
+- Invalid-token handling.
+- Revocation of compromised tokens.
+- Secure token regeneration.
+- Rate limiting or equivalent abuse protection suitable for the hosting platform.
+- Protection against unauthorized guest-record access.
+
+When a token is revoked, the previous QR code must stop working for verification.
+
+If the guest's name or seating assignment changes, retain the existing token unless it is compromised or the administrator chooses to revoke it. The current guest record should be displayed when the card is scanned.
+
+8. MOBILE CHECK-IN INTERFACE
+
+Create a dedicated mobile-first interface for authorized protocol officers.
+
+Provide two methods:
+A. Scan a guest's QR code using the phone camera.
+B. Search manually by full name or unique VIP ID.
+
+After scanning, display:
+- Guest photograph, if available.
+- Full name and title.
+- Unique VIP ID.
+- Assigned table and seat.
+- Current attendance status.
+- First check-in timestamp, if applicable.
+- A prominent action to confirm first check-in.
+
+Use large text and buttons so officers can operate the interface quickly at the entrance.
+
+Support modern Android and iPhone browsers. Request camera permission appropriately.
+
+If camera access fails, provide manual search as an alternative. Do not require a native mobile application.
+
+A QR scan must first display the verified guest details. It must not automatically mark the guest as checked in.
+
+9. FIRST CHECK-IN AND RE-ENTRY
+
+Implement the following states:
+
+NOT CHECKED IN:
+The guest is valid but has not yet arrived. The officer verifies the person and taps Confirm Check-in.
+
+CHECKED IN:
+The guest has already completed their first check-in. Display the original check-in time and the assigned seating information.
+
+RE-ENTRY:
+If a checked-in guest returns, show a clear message such as:
+ALREADY CHECKED IN — VERIFY IDENTITY AND ALLOW RE-ENTRY.
+
+A returning guest must not be automatically rejected or counted as a new arrival.
+
+INVALID OR UNKNOWN QR:
+Show an error and do not approve the guest automatically.
+
+REVOKED QR:
+Show that the QR code is no longer valid. Allow an authorized administrator to resolve the problem.
+
+Record the first successful check-in with:
+- Guest ID.
+- Date and time.
+- Authorized officer's ID.
+- Check-in event.
+
+Repeated scans must not create duplicate guest records or inflate attendance counts.
+
+For this simple version, do not require a complicated check-out or movement-tracking system.
+
+If an officer accidentally confirms the wrong guest, provide a controlled correction process for an administrator and retain an audit trail.
+
+10. MANUAL NAME SEARCH AND IDENTITY VERIFICATION
+
+If a VIP forgets the card, an authorized officer should be able to search for the guest by name or VIP ID.
+
+Display matching results with photographs where available and their assigned seating.
+
+When multiple guests have similar names, require the officer to distinguish between them rather than selecting the first match automatically.
+
+A matching name alone is not proof of identity. Use the photograph where available and reasonable confirmation by the protocol team.
+
+Do not expose sensitive contact details to officers unless necessary.
+
+11. GUEST CARD DISTRIBUTION
+
+Make it easy to send each guest their personalized card before the wedding.
+
+Provide download and sharing options suitable for WhatsApp and email.
+
+Do not require a paid WhatsApp API or paid email service.
+
+If native sharing is supported by the device, use it where practical. Otherwise, let the administrator download the card and share it manually.
+
+Do not claim a card has been sent unless the relevant delivery operation has actually succeeded.
+
+12. REPORTS AND EXPORTS
+
+Provide:
+- Total registered VIPs.
+- Total first-time check-ins.
+- Total guests not yet checked in.
+- Guest list grouped by table.
+- Occupied and available seats.
+- A printable seating report.
+- CSV or Excel export of guest and seating information.
+- Check-in history with officer and timestamp.
+
+Use unique guest records and count each guest only once in first-check-in attendance totals.
+
+Restrict exports to authorized administrators.
+
+13. WEDDING-DAY BACKUP
+
+Prepare a printable or downloadable backup report containing the necessary guest names, photographs where available, tables, seats, and first-check-in status.
+
+Make the backup easy to generate shortly before the wedding.
+
+If internet connectivity is unavailable:
+- Display a clear connectivity or verification error.
+- Do not falsely report that a QR code has been verified.
+- Allow protocol staff to consult the previously exported seating list.
+- Provide a simple procedure for reconciling manual check-ins once connectivity returns.
+
+Do not attempt complex offline synchronization unless it can be implemented reliably without expanding the project's scope.
+
+14. SECURITY AND DATA PROTECTION
+
+Implement:
+- Secure authentication.
+- Role-based authorization.
+- Server-side input validation.
+- Safe image-upload validation and size limits.
+- Secure environment-variable management.
+- Protected database access.
+- HTTPS in production.
+- Appropriate rate limiting.
+- Audit logging for seating changes, QR revocation, and check-ins.
+- Safe error messages that do not reveal database credentials or internal details.
+- Reasonable privacy protections for guest photographs and contact details.
+
+Use private photo storage where practical, with authenticated access or expiring signed URLs when appropriate.
+
+Do not expose the entire guest database through public API routes.
+
+Use a transaction or equivalent database safeguards where needed to prevent seat conflicts and duplicate first-check-ins during simultaneous requests.
+
+Provide a documented database backup/export procedure.
+
+15. DATABASE AND APPLICATION ARCHITECTURE
+
+Prefer Next.js with TypeScript, PostgreSQL through Supabase Free, and Vercel deployment if the current free-tier conditions are suitable.
+
+Use a maintainable schema for:
+- Administrators and protocol officers.
+- VIP guests.
+- Tables and seat assignments.
+- QR credentials and revocation state.
+- Check-in records and audit events.
+
+Enforce important data constraints in the database as well as in application code.
+
+Use server-side functions for privileged database operations. Never expose database service-role credentials in browser code.
+
+Store environment-specific configuration in environment variables.
+
+Provide an example environment file without real credentials.
+
+Do not store persistent guest data solely in browser memory or localStorage.
+
+If the existing project already has a suitable database and backend, reuse them when practical rather than introducing unnecessary services.
+
+16. FREE DEPLOYMENT TO VERCEL
+
+Deploy the finished application to Vercel using the free Hobby plan where eligible.
+
+The final production address should resemble:
+
+https://cosh2026-vip.vercel.app
+
+The exact available project URL may differ if the name is already taken.
+
+Requirements:
+- Use a free .vercel.app subdomain.
+- No purchased domain.
+- No paid hosting subscription.
+- No paid database tier.
+- No paid QR API.
+- No mandatory paid messaging provider.
+- No paid trial or surprise upgrade.
+
+Connect the project to GitHub if appropriate and configure automatic deployments.
+
+Set production environment variables securely in Vercel.
+
+Configure database credentials and access policies properly.
+
+Test the deployed production application, not only the local development version.
+
+Check all routes, authentication, QR generation, camera scanning, manual search, card downloads, database persistence, and check-in behavior after deployment.
+
+Verify that the production URL loads correctly over HTTPS.
+
+Explain any limitations of the free tiers and ensure that the implementation does not deliberately activate billable services.
+
+Do not claim that all future usage is guaranteed to remain free. Explain any current limits or provider policies that could affect the wedding.
+
+17. IMPLEMENTATION AND TESTING
+
+Work in stages:
+1. Inspect the project and identify the simplest suitable architecture.
+2. Implement authentication and the database.
+3. Implement guest registration and seating assignments.
+4. Implement QR tokens and branded cards.
+5. Implement mobile scanning and manual search.
+6. Implement check-in, duplicate-scan handling, and re-entry.
+7. Implement reports, exports, and backup procedures.
+8. Deploy to Vercel.
+9. Test the actual production deployment.
+
+Test at least:
+- A guest without a photograph.
+- Two guests with identical names.
+- An occupied seat.
+- An invalid QR code.
+- A revoked QR code.
+- A guest who has not checked in.
+- A guest who has already checked in.
+- A returning VIP.
+- A protocol officer attempting an unauthorized action.
+- A failed camera permission request.
+- A database or network error.
+- A refreshed page to verify that data persists.
+- Simultaneous requests to check in the same guest.
+- Downloading and printing a VIP card.
+
+18. REQUIRED DELIVERABLES
+
+Provide:
+- Complete working application source code.
+- A responsive admin dashboard.
+- Guest registration and editing.
+- Table and seat management.
+- Secure QR code generation and verification.
+- Branded VIP ID card generation and downloads.
+- Mobile scanning and manual search.
+- First check-in and re-entry handling.
+- Guest reports and exports.
+- Database schema and configuration.
+- Example environment variables.
+- README and setup instructions.
+- Simple deployment instructions for Vercel.
+- A wedding-day protocol guide.
+- A backup and recovery guide.
+- The verified production .vercel.app URL once successfully deployed.
+
+Keep the user experience straightforward for a non-technical wedding administrator.
+
+Do not add payments, public guest registration, facial recognition, GPS tracking, complex floor plans, unnecessary AI, or features outside the stated scope.
+
+FINAL SUCCESS CRITERION
+
+The system is complete when I can register a VIP, optionally upload a photograph, assign a table and seat, generate a unique branded QR ID card, download and send it, and have an authorized usher scan the code or search the name at the entrance.
+
+The usher must see the correct guest details and seating, confirm first check-in, and recognize returning guests without duplicate attendance records.
+
+The site must use persistent storage, work on smartphones, and be deployed and verified at a Vercel .vercel.app URL using eligible free services without requiring a paid subscription.
+
+Start by inspecting the existing project. Then implement the system, test it, deploy it if account access permits, and provide clear instructions for any manual account setup that remains.
+
+
+Lastly, make use of the wedding logo in the folder with name My Wedding Logo
