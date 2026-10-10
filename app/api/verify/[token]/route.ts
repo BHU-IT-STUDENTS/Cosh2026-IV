@@ -17,8 +17,12 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
   const tokenHash = createHash('sha256').update(token).digest('hex');
   const admin = createAdminClient();
   const { data: credential } = await admin.from('qr_credentials').select('guest_id,revoked_at').eq('token_hash', tokenHash).maybeSingle();
-  if (!credential) return NextResponse.json({ error: 'Invalid or unknown QR credential.' }, { status: 404 });
-  if (credential.revoked_at) return NextResponse.json({ error: 'This QR credential has been revoked.' }, { status: 410 });
+  if (!credential) {
+    // Log a non-sensitive fingerprint only; never log the QR token itself.
+    console.warn('QR verification failed: credential not found', { fingerprint: tokenHash.slice(0, 12) });
+    return NextResponse.json({ error: 'This QR card is no longer active. Ask an administrator to use Reissue and scan the newly downloaded card.', code: 'QR_NOT_ACTIVE' }, { status: 404 });
+  }
+  if (credential.revoked_at) return NextResponse.json({ error: 'This QR card was replaced. Ask an administrator for the newly issued card.', code: 'QR_REVOKED' }, { status: 410 });
   const { data: guest } = await admin.from('vip_guests').select('id,vip_id,full_name,designation,photo_path,table_number,seat_number,status,first_checked_in_at,created_at').eq('id', credential.guest_id).is('archived_at', null).maybeSingle();
   if (!guest) return NextResponse.json({ error: 'This VIP record is no longer active.' }, { status: 404 });
   // A valid card is not permission to view a private guest photo. Signed-in staff
