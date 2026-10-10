@@ -19,6 +19,6 @@ export function WorkspaceLinks() {
   }, [path]);
 
   if (path === '/admin' && adminNav) return createPortal(<><Link href="/admin/staff">Staff &amp; access</Link><Link href="/account">My profile</Link></>, adminNav);
-  if (path === '/check-in') return <aside className="workspace-links protocol-link" aria-label="Protocol officer shortcut"><Link href="/account">My account <b>→</b></Link></aside>;
+  if (path === '/check-in') return null;
   return null;
 }
