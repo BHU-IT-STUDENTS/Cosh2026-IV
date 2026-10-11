@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase/browser';
 
 const items = [
@@ -15,12 +16,34 @@ const items = [
 /** A direct mobile app dock: it does not rely on the desktop sidebar. */
 export function AdminAppNav() {
   const pathname = usePathname();
+  const [role, setRole] = useState<'admin' | 'officer' | null>(null);
+
+  useEffect(() => {
+    let active = true;
+    async function loadRole() {
+      const client = createClient();
+      const { data: { user } } = await client.auth.getUser();
+      if (!user || !active) return;
+      const { data } = await client.from('profiles').select('role').eq('id', user.id).maybeSingle();
+      if (active) setRole(data?.role === 'admin' ? 'admin' : 'officer');
+    }
+    if (pathname.startsWith('/admin')) loadRole();
+    return () => { active = false; };
+  }, [pathname]);
+
   if (!pathname.startsWith('/admin')) return null;
 
   async function signOut() {
     await createClient().auth.signOut();
     window.location.assign('/login');
   }
+
+  if (!role) return null;
+
+  if (role === 'officer') return <nav className="protocol-role-nav" aria-label="Protocol navigation"><Link href="/check-in"><span aria-hidden="true">▣</span><small>Check-in</small></Link><Link href="/directory"><span aria-hidden="true">⌕</span><small>VIPs</small></Link><Link href="/account"><span aria-hidden="true">◉</span><small>Account</small></Link><button type="button" onClick={signOut}><span aria-hidden="true">⇥</span><small>Sign out</small></button><style jsx global>{`
+    .protocol-role-nav { display:none; }
+    @media (max-width:760px) { .dashboard { padding-bottom:90px !important; }.protocol-role-nav { position:fixed; z-index:999; right:0; bottom:0; left:0; display:grid; grid-template-columns:repeat(4,1fr); min-height:76px; background:#fffdf7; border-top:1px solid #e8decb; box-shadow:0 -10px 28px rgba(18,47,38,.13); }.protocol-role-nav a,.protocol-role-nav button { display:grid; place-items:center; gap:4px; border:0; background:transparent; color:#536358; cursor:pointer; font:700 10px/1.1 inherit; text-decoration:none; }.protocol-role-nav span { color:#b88d47; font-size:23px; line-height:1; }.protocol-role-nav small { font:inherit; } }
+  `}</style></nav>;
 
   return <><button type="button" className="admin-sidebar-signout" onClick={signOut}><span aria-hidden="true">⇥</span> Sign out</button><nav className="admin-app-nav" aria-label="Administrator navigation">
     {items.map(item => <Link key={item.href} href={item.href} className={pathname === item.href ? 'active' : ''}><span aria-hidden="true">{item.icon}</span><small>{item.label}</small></Link>)}
