@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createHash, randomBytes } from 'crypto';
-import { requireAdmin } from '@/lib/auth';
+import { requireAdmin, requireUser } from '@/lib/auth';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { verificationUrl } from '@/lib/card';
 import { readProtectedQrToken, saveProtectedQrToken } from '@/lib/protected-qr-token';
@@ -45,7 +45,7 @@ async function prepareCredential(id: string, userId: string, regenerate: boolean
 /** Re-download is deliberately read-only: it always returns the existing active QR. */
 export async function GET(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const { user } = await requireAdmin(); const { id } = await params;
+    const { user } = await requireUser(); const { id } = await params;
     return await prepareCredential(id, user.id, false);
   } catch (error) {
     const message = error instanceof Error ? error.message : '';
