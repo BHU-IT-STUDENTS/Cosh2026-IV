@@ -20,21 +20,33 @@ export function MobileExperiencePolish() {
         if (revised !== original) node.nodeValue = revised;
       }
     };
+    const addProtocolDirectoryAction = () => {
+      if (window.location.pathname !== "/directory" || document.getElementById("protocol-offline-directory")) return;
+      const action = document.createElement("a");
+      action.id = "protocol-offline-directory";
+      action.href = "/directory/offline-directory";
+      action.target = "_blank";
+      action.rel = "noopener noreferrer";
+      action.className = "protocol-offline-directory-action";
+      action.textContent = "Download Offline VIP Directory (PDF)";
+      document.body.appendChild(action);
+    };
     const markSafeAreas = () => {
       if (!document.querySelector(".protocol-app-nav, .admin-app-nav")) return;
       document.querySelectorAll("main").forEach((main) => main.classList.add("mobile-nav-safe"));
       const nav = document.querySelector<HTMLElement>(".protocol-app-nav, .admin-app-nav");
       if (!nav || window.innerWidth > 800) return;
       const navTop = nav.getBoundingClientRect().top;
-      document.querySelectorAll<HTMLElement>("main a, main button").forEach((action) => {
-        if (action.closest(".protocol-app-nav, .admin-app-nav")) return;
+      document.querySelectorAll<HTMLElement>("a, button").forEach((action) => {
+        if (action.id === "protocol-offline-directory" || action.closest(".protocol-app-nav, .admin-app-nav")) return;
         const rect = action.getBoundingClientRect();
         if (rect.top < navTop && rect.bottom > navTop - 12) action.classList.add("mobile-action-clearance");
       });
     };
     humanizeCopy();
+    addProtocolDirectoryAction();
     markSafeAreas();
-    const observer = new MutationObserver(() => { humanizeCopy(); markSafeAreas(); });
+    const observer = new MutationObserver(() => { humanizeCopy(); addProtocolDirectoryAction(); markSafeAreas(); });
     observer.observe(document.body, { childList: true, subtree: true });
     window.addEventListener("resize", markSafeAreas);
     window.addEventListener("scroll", markSafeAreas, true);
@@ -50,6 +62,9 @@ export function MobileExperiencePolish() {
       .protocol-detail-layer, .modal-layer { z-index: 1400 !important; padding-bottom: 1rem !important; }
       body:has(.protocol-detail-layer) .protocol-app-nav, body:has(.modal-layer) .protocol-app-nav, body:has(.protocol-detail-layer) .admin-app-nav, body:has(.modal-layer) .admin-app-nav { display: none !important; }
       .mobile-action-clearance { position: relative !important; z-index: 2 !important; transform: translateY(-1.35rem) !important; }
+      .protocol-offline-directory-action { position: fixed; z-index: 100; left: 1rem; right: 1rem; bottom: calc(5.65rem + env(safe-area-inset-bottom)); display: flex; min-height: 3.15rem; align-items: center; justify-content: center; padding: .7rem 1rem; border-radius: .75rem; background: #143f34; color: #fffdf8; box-shadow: 0 10px 24px rgba(18,60,50,.22); font-size: .85rem; font-weight: 700; text-align: center; text-decoration: none; }
+      body:has(.protocol-detail-layer) .protocol-offline-directory-action, body:has(.modal-layer) .protocol-offline-directory-action { display: none !important; }
     }
+    @media (min-width: 801px) { .protocol-offline-directory-action { position: fixed; z-index: 100; right: 2rem; bottom: 2rem; display: inline-flex; align-items: center; justify-content: center; min-height: 3rem; padding: .7rem 1rem; border-radius: .65rem; background: #143f34; color: #fffdf8; box-shadow: 0 10px 24px rgba(18,60,50,.18); font-size: .85rem; font-weight: 700; text-decoration: none; } }
   `}</style>;
 }
